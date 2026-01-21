@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './JudgeForm.css';
 
 const JudgeForm = () => {
   const [currentStep, setCurrentStep] = useState(0);
+  const vantaRef = useRef(null);
+  const [vantaEffect, setVantaEffect] = useState(null);
   const [formData, setFormData] = useState({
     fullName: '',
     designation: '',
@@ -306,8 +308,31 @@ const JudgeForm = () => {
     );
   };
 
+  useEffect(() => {
+    if (!vantaEffect && window.VANTA) {
+      setVantaEffect(window.VANTA.NET({
+        el: vantaRef.current,
+        mouseControls: true,
+        touchControls: true,
+        gyroControls: false,
+        minHeight: 200.00,
+        minWidth: 200.00,
+        scale: 1.00,
+        scaleMobile: 1.00,
+        color: 0xf59e0b,
+        backgroundColor: 0xd97706,
+        points: 8.00,
+        maxDistance: 22.00,
+        spacing: 16.00
+      }))
+    }
+    return () => {
+      if (vantaEffect) vantaEffect.destroy()
+    }
+  }, [vantaEffect])
+
   return (
-    <div className="judge-form">
+    <div className="judge-form" ref={vantaRef}>
       <div className="form-container">
         <div className="form-header">
           <h1>HACKACCINO 4.0</h1>

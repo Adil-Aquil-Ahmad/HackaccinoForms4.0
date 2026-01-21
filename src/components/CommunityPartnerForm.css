@@ -1,20 +1,67 @@
 .community-partner-form {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background: #242524;
   padding: 40px 20px;
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Main gradient overlay */
+.community-partner-form::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: linear-gradient(180deg, #9E2C41 0%, #381017 100%);
+  opacity: 0.85;
+  z-index: 0;
+}
+
+/* Ellipse blur effects from brochure */
+.community-partner-form::after {
+  content: '';
+  position: absolute;
+  width: 700px;
+  height: 700px;
+  left: -15%;
+  top: -5%;
+  background: #191037;
+  filter: blur(250px);
+  border-radius: 50%;
+  z-index: 1;
 }
 
 .form-container {
-  background: white;
+  background: rgba(255, 255, 255, 0.98);
   border-radius: 20px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   max-width: 700px;
   width: 100%;
   padding: 40px;
   animation: slideIn 0.5s ease-out;
+  position: relative;
+  z-index: 10;
+  backdrop-filter: blur(10px);
+}
+
+/* Additional decorative blur */
+.community-partner-form .form-container::before {
+  content: '';
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  right: -50%;
+  bottom: -20%;
+  background: #340E1E;
+  filter: blur(200px);
+  border-radius: 50%;
+  z-index: -1;
+  pointer-events: none;
 }
 
 @keyframes slideIn {
@@ -35,12 +82,13 @@
 
 .form-header h1 {
   font-size: 2.5rem;
-  background: linear-gradient(135deg, #8B4513, #D2691E);
+  background: linear-gradient(180deg, #FFFFFF 0%, #FD738A 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   margin-bottom: 10px;
   font-weight: 900;
+  text-shadow: 0px 0px 20px rgba(253, 115, 138, 0.3);
 }
 
 .form-header p {
@@ -59,9 +107,10 @@
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(135deg, #8B4513, #D2691E);
+  background: linear-gradient(90deg, #9E2C41, #FD738A);
   transition: width 0.5s ease;
   border-radius: 10px;
+  box-shadow: 0 0 15px rgba(253, 115, 138, 0.5);
 }
 
 .form-content {
@@ -88,9 +137,10 @@
   justify-content: center;
   width: 150px;
   height: 150px;
-  background: linear-gradient(135deg, rgba(139, 69, 19, 0.1), rgba(210, 105, 30, 0.1));
+  background: linear-gradient(135deg, rgba(158, 44, 65, 0.2), rgba(253, 115, 138, 0.2));
   border-radius: 20px;
-  color: #8B4513;
+  color: #FD738A;
+  box-shadow: 0 10px 30px rgba(158, 44, 65, 0.3);
 }
 
 .intro-description {
@@ -113,10 +163,11 @@
   justify-content: center;
   width: 120px;
   height: 120px;
-  background: linear-gradient(135deg, rgba(139, 69, 19, 0.1), rgba(210, 105, 30, 0.1));
+  background: linear-gradient(135deg, rgba(158, 44, 65, 0.2), rgba(253, 115, 138, 0.2));
   border-radius: 20px;
-  color: #8B4513;
+  color: #FD738A;
   margin-bottom: 30px;
+  filter: drop-shadow(0 4px 12px rgba(253, 115, 138, 0.3));
 }
 
 .step-title {
@@ -155,9 +206,9 @@
 
 .form-input:focus {
   outline: none;
-  border-color: #8B4513;
+  border-color: #FD738A;
   background: white;
-  box-shadow: 0 0 0 4px rgba(139, 69, 19, 0.1);
+  box-shadow: 0 0 0 4px rgba(253, 115, 138, 0.15);
 }
 
 .form-input.error {
@@ -228,14 +279,14 @@
 }
 
 .btn-next {
-  background: linear-gradient(135deg, #8B4513, #A0522D);
+  background: linear-gradient(135deg, #9E2C41, #FD738A);
   color: white;
   min-width: 150px;
 }
 
 .btn-next:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(139, 69, 19, 0.3);
+  box-shadow: 0 10px 25px rgba(158, 44, 65, 0.4);
 }
 
 .btn-next:disabled {

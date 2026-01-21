@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './SponsorForm.css';
 
 const SponsorForm = () => {
   const [currentStep, setCurrentStep] = useState(0);
+  const vantaRef = useRef(null);
+  const [vantaEffect, setVantaEffect] = useState(null);
   const [formData, setFormData] = useState({
     companyName: '',
     pointOfContact: '',
@@ -293,8 +295,31 @@ const SponsorForm = () => {
     );
   };
 
+  useEffect(() => {
+    if (!vantaEffect && window.VANTA) {
+      setVantaEffect(window.VANTA.NET({
+        el: vantaRef.current,
+        mouseControls: true,
+        touchControls: true,
+        gyroControls: false,
+        minHeight: 200.00,
+        minWidth: 200.00,
+        scale: 1.00,
+        scaleMobile: 1.00,
+        color: 0x667eea,
+        backgroundColor: 0x764ba2,
+        points: 8.00,
+        maxDistance: 22.00,
+        spacing: 16.00
+      }))
+    }
+    return () => {
+      if (vantaEffect) vantaEffect.destroy()
+    }
+  }, [vantaEffect])
+
   return (
-    <div className="sponsor-form">
+    <div className="sponsor-form" ref={vantaRef}>
       <div className="form-container">
         <div className="form-header">
           <h1>HACKACCINO 4.0</h1>

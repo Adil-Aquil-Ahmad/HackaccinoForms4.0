@@ -1,10 +1,36 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './FormsLanding.css';
 
 const FormsLanding = () => {
+  const vantaRef = useRef(null);
+  const [vantaEffect, setVantaEffect] = useState(null);
+
+  useEffect(() => {
+    if (!vantaEffect && window.VANTA) {
+      setVantaEffect(window.VANTA.NET({
+        el: vantaRef.current,
+        mouseControls: true,
+        touchControls: true,
+        gyroControls: false,
+        minHeight: 200.00,
+        minWidth: 200.00,
+        scale: 1.00,
+        scaleMobile: 1.00,
+        color: 0x4E69E4,
+        backgroundColor: 0x191037,
+        points: 10.00,
+        maxDistance: 20.00,
+        spacing: 15.00
+      }))
+    }
+    return () => {
+      if (vantaEffect) vantaEffect.destroy()
+    }
+  }, [vantaEffect])
+
   return (
-    <div className="forms-landing">
+    <div className="forms-landing" ref={vantaRef}>
       <div className="forms-container">
         <div className="forms-header">
           <h1>HACKACCINO 4.0</h1>
