@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import './App.css';
-import LoadingScreen from './components/LoadingScreen';
 import FormsLanding from './components/FormsLanding';
 import CommunityPartnerPage from './pages/CommunityPartnerPage';
 import SponsorPage from './pages/SponsorPage';
