@@ -1,16 +1,28 @@
 .forms-landing {
   min-height: 100vh;
-  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e22ce 100%);
+  background: linear-gradient(135deg, #9E2C41 0%, #8C203F 20%, #381017 40%, #340E1E 60%, #FD738A 80%, #F55E86 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 40px 20px;
+  position: relative;
+}
+
+#lightning-canvas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  mix-blend-mode: screen;
+  filter: blur(0.5px);
 }
 
 .forms-container {
   max-width: 1200px;
   width: 100%;
   text-align: center;
+  position: relative;
+  z-index: 2;
 }
 
 .forms-header {

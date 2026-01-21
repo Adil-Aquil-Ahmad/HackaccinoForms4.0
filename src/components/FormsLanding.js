@@ -4,102 +4,244 @@ import './FormsLanding.css';
 
 const FormsLanding = () => {
   const vantaRef = useRef(null);
+  const canvasRef = useRef(null);
   const [vantaEffect, setVantaEffect] = useState(null);
   const [hoveredCard, setHoveredCard] = useState(null);
-  const animationRef = useRef(null);
-  const currentColorRef = useRef({ r: 78, g: 105, b: 228 }); // Default color #4E69E4
-
-  const interpolateColor = (start, end, progress) => {
-    return {
-      r: Math.round(start.r + (end.r - start.r) * progress),
-      g: Math.round(start.g + (end.g - start.g) * progress),
-      b: Math.round(start.b + (end.b - start.b) * progress)
-    };
-  };
-
-  const rgbToHex = (r, g, b) => {
-    return (r << 16) | (g << 8) | b;
-  };
 
   useEffect(() => {
     if (!vantaEffect && window.VANTA) {
-      setVantaEffect(window.VANTA.NET({
+      const effect = window.VANTA.CLOUDS({
         el: vantaRef.current,
         mouseControls: true,
         touchControls: true,
         gyroControls: false,
         minHeight: 200.00,
         minWidth: 200.00,
-        scale: 1.00,
-        scaleMobile: 1.00,
-        color: 0x4E69E4,
-        backgroundColor: 0x191037,
-        points: 10.00,
-        maxDistance: 20.00,
-        spacing: 15.00
-      }))
+        scale: 2.8,
+        scaleMobile: 6.5,
+        backgroundColor: 0x080002,
+        skyColor: 0x220005,
+        cloudColor: 0x8a1c24,
+        cloudShadowColor: 0x050001,
+        sunColor: 0xff3a2a,
+        sunGlareColor: 0xffc1b5,
+        sunlightColor: 0xff5a3a,
+        speed: 0.22
+      });
+
+      // Initialize lightning uniforms
+      if (effect && effect.uniforms) {
+        effect.uniforms.lightningTime = { type: 'f', value: 0 };
+        effect.uniforms.lightningPos = { type: 'v3', value: new window.THREE.Vector3(0, -10, 0) };
+        effect.uniforms.lightningPower = { type: 'f', value: 0 };
+      }
+
+      setVantaEffect(effect);
     }
     return () => {
       if (vantaEffect) vantaEffect.destroy()
     }
   }, [vantaEffect])
 
+  // Lightning cloud reaction sync
+  const lightningCloudReact = (x, y) => {
+    if (!vantaEffect) return;
+
+    vantaEffect.uniforms.iMouse.value.set(
+      x,
+      vantaEffect.height - y
+    );
+
+    vantaEffect.setOptions({
+      sunlightColor: 0xffe1a6,
+      sunGlareColor: 0xfff4cf
+    });
+
+    setTimeout(() => {
+      vantaEffect.setOptions({
+        sunlightColor: 0xff5a3a,
+        sunGlareColor: 0xffc1b5
+      });
+    }, 180);
+  };
+
+  // Volumetric lightning strike system
+  const triggerVolumetricStrike = () => {
+    if (!vantaEffect || !vantaEffect.uniforms) return;
+
+    const x = Math.random() * 2 - 1;
+    const y = Math.random() * 1;
+    const z = Math.random() * 2 - 1;
+
+    vantaEffect.uniforms.lightningPos.value.set(x, y, z);
+    vantaEffect.uniforms.lightningPower.value = 1.0;
+
+    let t = 0;
+    const flicker = () => {
+      t += 0.016;
+      vantaEffect.uniforms.lightningTime.value += 0.016;
+      vantaEffect.uniforms.lightningPower.value *= 0.88;
+      if (t < 0.4) requestAnimationFrame(flicker);
+    };
+
+    flicker();
+  };
+
+  // Auto-trigger volumetric strikes
   useEffect(() => {
-    if (vantaEffect) {
-      let targetColor;
-      
-      if (hoveredCard === 'judge') {
-        targetColor = { r: 245, g: 158, b: 11 }; // #f59e0b
-      } else if (hoveredCard === 'sponsor') {
-        targetColor = { r: 102, g: 126, b: 234 }; // #667eea
-      } else if (hoveredCard === 'community') {
-        targetColor = { r: 253, g: 115, b: 138 }; // #FD738A
-      } else {
-        targetColor = { r: 78, g: 105, b: 228 }; // #4E69E4
+    if (!vantaEffect) return;
+
+    const strikeInterval = setInterval(() => {
+      triggerVolumetricStrike();
+    }, 5000 + Math.random() * 3000); // 5-8 seconds
+
+    return () => clearInterval(strikeInterval);
+  }, [vantaEffect]);
+
+  // Lightning canvas system
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    const bolts = [];
+
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+
+    resize();
+    window.addEventListener('resize', resize);
+
+    class Point {
+      constructor(x, y) {
+        this.x = x;
+        this.y = y;
       }
-
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
-
-      let progress = 0;
-      const duration = 1500; // 1.5 seconds for full transition
-      const startTime = Date.now();
-      const startColor = { ...currentColorRef.current };
-
-      const animate = () => {
-        const elapsed = Date.now() - startTime;
-        progress = Math.min(elapsed / duration, 1);
-        
-        // Easing function for smoother transition
-        const eased = progress < 0.5 
-          ? 2 * progress * progress 
-          : 1 - Math.pow(-2 * progress + 2, 2) / 2;
-
-        const newColor = interpolateColor(startColor, targetColor, eased);
-        currentColorRef.current = newColor;
-        
-        vantaEffect.setOptions({
-          color: rgbToHex(newColor.r, newColor.g, newColor.b)
-        });
-
-        if (progress < 1) {
-          animationRef.current = requestAnimationFrame(animate);
-        }
-      };
-
-      animate();
     }
 
-    return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
+    class Bolt {
+      constructor() {
+        this.startX = Math.random() * canvas.width;
+        this.startY = -50;
+        this.points = [];
+        this.thickness = 2 + Math.random() * 3;
+        this.depth = Math.random();
+        this.life = 0;
+        this.maxLife = 6 + Math.random() * 8;
+        
+        this.generate();
       }
+
+      generate() {
+        let x = this.startX;
+        let y = this.startY;
+        this.points.push(new Point(x, y));
+
+        while (y < canvas.height + 50) {
+          x += (Math.random() - 0.5) * 80;
+          y += 40 + Math.random() * 60;
+          this.points.push(new Point(x, y));
+        }
+      }
+
+      draw() {
+        if (this.life >= this.maxLife) return;
+
+        ctx.save();
+
+        // Depth-based alpha and thickness
+        const baseAlpha = 1 - (this.life / this.maxLife);
+        ctx.globalAlpha = this.depth < 0.3 ? baseAlpha : 
+                          this.depth < 0.6 ? baseAlpha * 0.75 : 
+                          baseAlpha * 0.45;
+
+        const depthScale = this.depth < 0.3 ? 1.4 : 
+                           this.depth < 0.6 ? 1 : 
+                           0.6;
+
+        // Additive blending
+        ctx.globalCompositeOperation = 'lighter';
+
+        for (let i = 0; i < this.points.length - 1; i++) {
+          const p1 = this.points[i];
+          const p2 = this.points[i + 1];
+          const mid = new Point(
+            (p1.x + p2.x) / 2 + (Math.random() - 0.5) * 20,
+            (p1.y + p2.y) / 2
+          );
+
+          // Inner core
+          ctx.shadowBlur = 12;
+          ctx.shadowColor = 'rgba(255, 220, 140, 0.6)';
+          ctx.strokeStyle = 'rgba(255, 245, 210, 0.9)';
+          ctx.lineWidth = this.thickness * 0.6 * depthScale;
+
+          ctx.beginPath();
+          ctx.moveTo(p1.x, p1.y);
+          ctx.quadraticCurveTo(mid.x, mid.y, p2.x, p2.y);
+          ctx.stroke();
+
+          // Outer glow
+          ctx.shadowBlur = 30;
+          ctx.shadowColor = 'rgba(255, 180, 80, 0.35)';
+          ctx.lineWidth = this.thickness * 1.4 * depthScale;
+
+          ctx.beginPath();
+          ctx.moveTo(p1.x, p1.y);
+          ctx.quadraticCurveTo(mid.x, mid.y, p2.x, p2.y);
+          ctx.stroke();
+        }
+
+        ctx.restore();
+        this.life++;
+
+        // Trigger cloud reaction on first frame
+        if (this.life === 1) {
+          const lastPoint = this.points[this.points.length - 1];
+          lightningCloudReact(lastPoint.x, lastPoint.y);
+        }
+      }
+    }
+
+    const clearScreen = () => {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.65)'; // Fog fade
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
     };
-  }, [hoveredCard, vantaEffect])
+
+    const animate = () => {
+      clearScreen();
+
+      // Spawn new bolts randomly
+      if (Math.random() < 0.015) {
+        bolts.push(new Bolt());
+      }
+
+      // Draw and clean up bolts
+      for (let i = bolts.length - 1; i >= 0; i--) {
+        bolts[i].draw();
+        if (bolts[i].life >= bolts[i].maxLife) {
+          bolts.splice(i, 1);
+        }
+      }
+
+      requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    return () => {
+      window.removeEventListener('resize', resize);
+    };
+  }, [vantaEffect]);
 
   return (
     <div className="forms-landing" ref={vantaRef}>
+      <canvas
+        ref={canvasRef}
+        id="lightning-canvas"
+      />
       <div className="forms-container">
         <div className="forms-header">
           <h1>HACKACCINO 4.0</h1>
