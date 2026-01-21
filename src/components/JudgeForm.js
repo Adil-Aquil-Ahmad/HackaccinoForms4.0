@@ -7,12 +7,13 @@ const JudgeForm = () => {
   const [vantaEffect, setVantaEffect] = useState(null);
   const [formData, setFormData] = useState({
     fullName: '',
-    designation: '',
     organization: '',
     email: '',
     phone: '',
+    jobTitle: '',
     expertise: '',
-    experience: ''
+    city: '',
+    linkedIn: ''
   });
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -21,34 +22,32 @@ const JudgeForm = () => {
   const steps = [
     {
       id: 'intro',
-      title: 'HACKACCINO 4.0',
-      subtitle: 'Call for Judges',
+      title: 'HACKACCINO 2026',
+      subtitle: 'Call for Mentors & Judges',
       content: (
         <div className="intro-content">
           <div className="intro-image">
             <div className="image-placeholder judge">
               <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
-                <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
-                <path d="M4 22h16"></path>
-                <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
-                <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
-                <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
               </svg>
             </div>
           </div>
           <p className="intro-description">
-            Computer Society of India, Bennett University Student Chapter invites industry experts 
-            and professionals to judge our flagship 24-hour hackathon, Hackaccino 2026. Scheduled 
-            for April 2026, this event brings together 1500+ talented students showcasing innovative 
-            solutions. Your expertise will help identify and encourage the next generation of innovators.
+            Computer Society of India, Bennett University Student Chapter invites experienced professionals 
+            to join Hackaccino 2026 as Mentors and Judges. Scheduled for April 2026, this 24-hour hackathon 
+            will bring together 1500+ students in a dynamic and innovative environment. Your expertise will 
+            help guide, evaluate, and inspire the next generation of innovators.
           </p>
         </div>
       )
     },
     {
       id: 'fullName',
-      title: 'What is your full name?',
+      title: 'Full Name',
       field: 'fullName',
       type: 'text',
       placeholder: 'Enter your full name',
@@ -60,24 +59,11 @@ const JudgeForm = () => {
       )
     },
     {
-      id: 'designation',
-      title: 'What is your current designation?',
-      field: 'designation',
-      type: 'text',
-      placeholder: 'e.g., Senior Software Engineer, CTO, Professor',
-      icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
-          <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
-        </svg>
-      )
-    },
-    {
       id: 'organization',
-      title: 'Which organization do you work for?',
+      title: 'Organization / Institution',
       field: 'organization',
       type: 'text',
-      placeholder: 'Enter your organization name',
+      placeholder: 'Enter your organization or institution name',
       icon: (
         <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
@@ -86,9 +72,24 @@ const JudgeForm = () => {
       )
     },
     {
-      id: 'contact',
-      title: 'Contact Email / Phone Number',
-      fields: ['email', 'phone'],
+      id: 'email',
+      title: 'Email Address',
+      field: 'email',
+      type: 'email',
+      placeholder: 'your.email@example.com',
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+          <polyline points="22,6 12,13 2,6"></polyline>
+        </svg>
+      )
+    },
+    {
+      id: 'phone',
+      title: 'Phone Number',
+      field: 'phone',
+      type: 'tel',
+      placeholder: '+91 XXXXX XXXXX',
       icon: (
         <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
@@ -96,11 +97,24 @@ const JudgeForm = () => {
       )
     },
     {
+      id: 'jobTitle',
+      title: 'Job Title / Designation',
+      field: 'jobTitle',
+      type: 'text',
+      placeholder: 'e.g., Senior Software Engineer, Product Manager, Professor',
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+          <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+        </svg>
+      )
+    },
+    {
       id: 'expertise',
-      title: 'What is your area of expertise?',
+      title: 'Primary Domain of Expertise',
       field: 'expertise',
-      type: 'choice',
-      options: ['AI/ML', 'Web Development', 'Mobile Development', 'Cloud Computing', 'Blockchain', 'IoT', 'Cybersecurity', 'Data Science', 'Other'],
+      type: 'text',
+      placeholder: 'e.g., AI/ML, Web Development, Cybersecurity, Data Science',
       icon: (
         <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <polyline points="16 18 22 12 16 6"></polyline>
@@ -109,15 +123,29 @@ const JudgeForm = () => {
       )
     },
     {
-      id: 'experience',
-      title: 'Years of professional experience?',
-      field: 'experience',
-      type: 'choice',
-      options: ['0-2 years', '3-5 years', '6-10 years', '10+ years'],
+      id: 'city',
+      title: 'City',
+      field: 'city',
+      type: 'text',
+      placeholder: 'Enter your city',
       icon: (
         <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <circle cx="12" cy="12" r="10"></circle>
-          <polyline points="12 6 12 12 16 14"></polyline>
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+          <circle cx="12" cy="10" r="3"></circle>
+        </svg>
+      )
+    },
+    {
+      id: 'linkedIn',
+      title: 'LinkedIn Profile URL',
+      field: 'linkedIn',
+      type: 'url',
+      placeholder: 'https://linkedin.com/in/yourprofile',
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+          <rect x="2" y="9" width="4" height="12"></rect>
+          <circle cx="4" cy="4" r="2"></circle>
         </svg>
       )
     },
@@ -133,8 +161,8 @@ const JudgeForm = () => {
             </svg>
           </div>
           <p className="thankyou-message">
-            Thank you for your interest in judging Hackaccino 2026. Our team will reach out 
-            to you soon with event details and judging guidelines.
+            Thank you for expressing interest in being a Mentor or Judge at Hackaccino 2026. 
+            Our team will review your details and reach out with further information.
           </p>
         </div>
       )
@@ -149,26 +177,23 @@ const JudgeForm = () => {
       const value = formData[step.field];
       if (!value || value.trim() === '') {
         newErrors[step.field] = 'This field is required';
-      }
-    }
-
-    if (step.fields) {
-      step.fields.forEach(field => {
-        const value = formData[field];
-        if (!value || value.trim() === '') {
-          newErrors[field] = 'This field is required';
-        } else if (field === 'email') {
-          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-          if (!emailRegex.test(value)) {
-            newErrors[field] = 'Please enter a valid email address';
-          }
-        } else if (field === 'phone') {
-          const phoneRegex = /^[0-9]{10}$/;
-          if (!phoneRegex.test(value.replace(/\D/g, ''))) {
-            newErrors[field] = 'Please enter a valid 10-digit phone number';
-          }
+      } else if (step.type === 'email') {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(value)) {
+          newErrors[step.field] = 'Please enter a valid email address';
         }
-      });
+      } else if (step.type === 'tel') {
+        const phoneRegex = /^[0-9+\s-]{10,}$/;
+        if (!phoneRegex.test(value)) {
+          newErrors[step.field] = 'Please enter a valid phone number';
+        }
+      } else if (step.type === 'url') {
+        try {
+          new URL(value);
+        } catch {
+          newErrors[step.field] = 'Please enter a valid URL';
+        }
+      }
     }
 
     setErrors(newErrors);
@@ -247,7 +272,7 @@ const JudgeForm = () => {
         <h2 className="step-title">{step.title}</h2>
         {step.subtitle && <p className="step-subtitle">{step.subtitle}</p>}
         
-        {step.field && step.type === 'text' && (
+        {step.field && (
           <div className="input-group">
             <input
               type={step.type}
@@ -258,49 +283,6 @@ const JudgeForm = () => {
             />
             {errors[step.field] && (
               <span className="error-message">{errors[step.field]}</span>
-            )}
-          </div>
-        )}
-
-        {step.field && step.type === 'choice' && (
-          <div className="choice-group">
-            {step.options.map((option) => (
-              <button
-                key={option}
-                className={`choice-button ${formData[step.field] === option ? 'selected' : ''}`}
-                onClick={() => handleChoiceSelect(step.field, option)}
-              >
-                {option}
-              </button>
-            ))}
-            {errors[step.field] && (
-              <span className="error-message">{errors[step.field]}</span>
-            )}
-          </div>
-        )}
-
-        {step.fields && (
-          <div className="input-group multi">
-            <input
-              type="email"
-              value={formData.email}
-              onChange={(e) => handleInputChange('email', e.target.value)}
-              placeholder="Email address"
-              className={`form-input ${errors.email ? 'error' : ''}`}
-            />
-            {errors.email && (
-              <span className="error-message">{errors.email}</span>
-            )}
-            
-            <input
-              type="tel"
-              value={formData.phone}
-              onChange={(e) => handleInputChange('phone', e.target.value)}
-              placeholder="Phone number"
-              className={`form-input ${errors.phone ? 'error' : ''}`}
-            />
-            {errors.phone && (
-              <span className="error-message">{errors.phone}</span>
             )}
           </div>
         )}
@@ -335,8 +317,8 @@ const JudgeForm = () => {
     <div className="judge-form" ref={vantaRef}>
       <div className="form-container">
         <div className="form-header">
-          <h1>HACKACCINO 4.0</h1>
-          <p>Call for Judges</p>
+          <h1>HACKACCINO 2026</h1>
+          <p>Call for Mentors & Judges</p>
         </div>
 
         <div className="progress-bar">

@@ -138,7 +138,7 @@ const FormsLanding = () => {
               </svg>
             </div>
             <h2>Community Partner</h2>
-            <p>Partner with us to reach 3000+ students</p>
+            <p>Partner with us to reach 1500+ students</p>
           </Link>
 
           <Link 

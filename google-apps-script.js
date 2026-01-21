@@ -1,12 +1,12 @@
 /**
- * Google Apps Script for Hackaccino 4.0 Forms
- * Handles Community Partner, Sponsor, and Judge form submissions
+ * Google Apps Script for Hackaccino 2026 Forms
+ * Handles Community Partner, Sponsor, and Mentors & Judges form submissions
  * 
  * Setup Instructions:
  * 1. Create THREE sheets in your Google Spreadsheet:
  *    - Sheet 1: "Community Partners" with columns: Timestamp | Full Name | College/University | Email | Phone | Organization
  *    - Sheet 2: "Sponsors" with columns: Timestamp | Company Name | Point of Contact | Email | Phone | Sponsorship Type | Sponsor Tier
- *    - Sheet 3: "Judges" with columns: Timestamp | Full Name | Designation | Organization | Email | Phone | Expertise | Experience
+ *    - Sheet 3: "Mentors & Judges" with columns: Timestamp | Full Name | Organization | Email | Phone | Job Title | Expertise | City | LinkedIn
  * 2. This script will auto-create sheets if they don't exist
  * 3. Deploy as Web App with "Anyone" access
  */
@@ -41,23 +41,24 @@ function doPost(e) {
         data.sponsorTier || ''
       ];
     } else if (formType === 'judge') {
-      // Get or create Judges sheet
-      sheet = spreadsheet.getSheetByName('Judges');
+      // Get or create Mentors & Judges sheet
+      sheet = spreadsheet.getSheetByName('Mentors & Judges');
       if (!sheet) {
-        sheet = spreadsheet.insertSheet('Judges');
-        sheet.appendRow(['Timestamp', 'Full Name', 'Designation', 'Organization', 'Email', 'Phone', 'Expertise', 'Experience']);
+        sheet = spreadsheet.insertSheet('Mentors & Judges');
+        sheet.appendRow(['Timestamp', 'Full Name', 'Organization', 'Email', 'Phone', 'Job Title', 'Expertise', 'City', 'LinkedIn']);
       }
       
-      // Prepare judge data
+      // Prepare mentor/judge data
       rowData = [
         new Date(),
         data.fullName || '',
-        data.designation || '',
         data.organization || '',
         data.email || '',
         data.phone || '',
+        data.jobTitle || '',
         data.expertise || '',
-        data.experience || ''
+        data.city || '',
+        data.linkedIn || ''
       ];
     } else {
       // Get or create Community Partners sheet
