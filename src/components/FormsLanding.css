@@ -55,12 +55,18 @@ body {
 
 .background-video {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: left center;
+  opacity: 0;
+  will-change: opacity;
+  transform: translateZ(0);
+}
+
+.background-video.visible {
+  opacity: 1;
 }
 
 .video-overlay {
@@ -215,25 +221,74 @@ body {
 }
 
 @media (max-width: 768px) {
+  .background-video {
+    object-position: 25% center;
+  }
+
+  .forms-landing {
+    padding: 20px 15px;
+    min-height: 100vh;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .forms-header {
+    margin-bottom: 30px;
+  }
+
   .forms-header h1 {
-    font-size: 2.5rem;
+    font-size: 2rem;
+    margin-bottom: 5px;
   }
 
   .forms-header p {
-    font-size: 1.2rem;
+    font-size: 1rem;
   }
 
   .forms-grid {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 15px;
+    margin-bottom: 20px;
   }
 
   .form-card {
-    padding: 40px 20px;
+    padding: 25px 20px;
+    border-radius: 15px;
   }
 
   .form-card h2 {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
+    margin-bottom: 5px;
+  }
+
+  .form-card p {
+    font-size: 0.9rem;
+  }
+
+  .card-icon svg {
+    width: 45px;
+    height: 45px;
+  }
+
+  .card-icon {
+    margin-bottom: 10px;
+  }
+
+  .form-card:hover {
+    transform: scale(1.02);
+  }
+
+  .forms-grid:has(.form-card:hover) .form-card:not(:hover) {
+    transform: scale(0.98);
+    opacity: 0.9;
+  }
+
+  .forms-footer {
+    margin-top: 15px;
+  }
+
+  .forms-footer p {
+    font-size: 0.85rem;
   }
 }
 

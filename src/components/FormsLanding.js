@@ -7,7 +7,8 @@ const FormsLanding = () => {
 
   const [hoveredCard, setHoveredCard] = useState(null);
   const [isReverse, setIsReverse] = useState(false);
-  const videoRef = useRef(null);
+  const forwardRef = useRef(null);
+  const reverseRef = useRef(null);
   const [currentTheme, setCurrentTheme] = useState('default');
 
   const themes = [
@@ -82,23 +83,74 @@ const FormsLanding = () => {
   }, []);
 
   useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
+    const forward = forwardRef.current;
+    const reverse = reverseRef.current;
+    if (!forward || !reverse) return;
 
-    const handleEnded = () => {
-      setIsReverse(prev => !prev);
+    forward.play();
+
+    const showReverseSafely = () => {
+      reverse.currentTime = 0;
+      reverse.play();
+
+      const reveal = () => {
+        setIsReverse(true);
+      };
+
+      if ("requestVideoFrameCallback" in reverse) {
+        reverse.requestVideoFrameCallback(reveal);
+      } else {
+        reverse.addEventListener("timeupdate", reveal, { once: true });
+      }
     };
 
-    video.addEventListener('ended', handleEnded);
-    return () => video.removeEventListener('ended', handleEnded);
-  }, [isReverse]);
+    const showForwardSafely = () => {
+      forward.currentTime = 0;
+      forward.play();
+
+      const reveal = () => {
+        setIsReverse(false);
+      };
+
+      if ("requestVideoFrameCallback" in forward) {
+        forward.requestVideoFrameCallback(reveal);
+      } else {
+        forward.addEventListener("timeupdate", reveal, { once: true });
+      }
+    };
+
+    forward.addEventListener("ended", showReverseSafely);
+    reverse.addEventListener("ended", showForwardSafely);
+
+    return () => {
+      forward.removeEventListener("ended", showReverseSafely);
+      reverse.removeEventListener("ended", showForwardSafely);
+    };
+  }, []);
 
   return (
     <div className="forms-landing">
       <div className="video-section">
-        <video ref={videoRef} autoPlay muted playsInline className="background-video" key={isReverse ? 'reverse' : 'forward'}>
-          <source src={isReverse ? "/Hackaccino - REVERSE - Videobolt.net.mp4" : "/Hackaccino.mp4"} type="video/mp4" />
-        </video>
+        <video
+          ref={forwardRef}
+          className={`background-video ${!isReverse ? 'visible' : ''}`}
+          src="/Hackaccino.mp4"
+          muted
+          playsInline
+          preload="auto"
+          disablePictureInPicture
+        />
+
+        <video
+          ref={reverseRef}
+          className={`background-video ${isReverse ? 'visible' : ''}`}
+          src="/Hackaccino-reverse.mp4"
+          muted
+          playsInline
+          preload="auto"
+          disablePictureInPicture
+        />
+
         <div className="video-overlay"></div>
       </div>
       <div className="forms-container">
