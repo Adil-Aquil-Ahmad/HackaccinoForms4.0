@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './FormsLanding.css';
-import BackgroundVideo from './BackgroundVideo';
+import Animation from './animation/animation';
+
 
 const FormsLanding = () => {
   const ENABLE_GLITCH = false;
@@ -96,7 +97,7 @@ const FormsLanding = () => {
 
   return (
     <div className="forms-landing">
-      <BackgroundVideo />
+      <Animation />
       <div className="page-sections">
         <div className="section">
           <div className="forms-container">

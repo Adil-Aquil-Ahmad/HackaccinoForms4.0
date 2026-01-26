@@ -106,42 +106,6 @@ body {
   overflow-x: hidden;
 }
 
-.video-section {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  z-index: 0;
-}
-
-.background-video {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: left center;
-  opacity: 0;
-  will-change: opacity;
-  transform: translateZ(0);
-}
-
-.background-video.visible {
-  opacity: 1;
-}
-
-.video-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.1);
-  z-index: 1;
-}
-
 .forms-container {
   width: 100%;
   position: relative;
@@ -451,17 +415,35 @@ body {
 }
 
 .form-card:hover {
-  transform: translateZ(100px) scale(1.05) rotateY(0deg);
-  background: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 8px 40px 0 rgba(31, 38, 135, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  transform: translateY(-10px) scale(1.02);
+  background: rgba(255, 255, 255, 0.1);
   z-index: 10;
 }
 
+.sponsor-card:hover {
+  box-shadow: 0 20px 40px -5px rgba(167, 139, 250, 0.4), 0 0 20px rgba(167, 139, 250, 0.2);
+  border: 1px solid rgba(167, 139, 250, 0.5);
+}
+
+.community-card:hover {
+  box-shadow: 0 20px 40px -5px rgba(251, 113, 133, 0.4), 0 0 20px rgba(251, 113, 133, 0.2);
+  border: 1px solid rgba(251, 113, 133, 0.5);
+}
+
+.judge-card:hover {
+  box-shadow: 0 20px 40px -5px rgba(251, 191, 36, 0.4), 0 0 20px rgba(251, 191, 36, 0.2);
+  border: 1px solid rgba(251, 191, 36, 0.5);
+}
+
+.form-card:hover .card-icon svg {
+  transform: scale(1.15) translateY(-5px);
+  filter: drop-shadow(0 0 12px currentColor);
+}
+
 .forms-grid:has(.form-card:hover) .form-card:not(:hover) {
-  transform: translateZ(-50px) scale(0.95);
-  opacity: 0.7;
-  filter: brightness(0.8);
+  transform: scale(0.95);
+  opacity: 0.5;
+  filter: blur(2px) grayscale(0.6);
 }
 
 .sponsor-card .card-icon {
@@ -489,6 +471,7 @@ body {
   display: block;
   margin: 0 auto;
   filter: drop-shadow(0 4px 15px rgba(255, 255, 255, 0.3));
+  transition: all 0.4s ease;
 }
 
 .card-text-wrapper {
@@ -1070,10 +1053,12 @@ body.glitching .form-card:hover {
   position: absolute;
   inset: 6px;
   clip-path: inherit;
-  border: 1px solid rgba(255,255,255,0.25);
+  border: 1px solid rgba(255,255,255,0.4);
+  border-radius: 16px;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 body[data-theme="polygon"] .form-card::after {
