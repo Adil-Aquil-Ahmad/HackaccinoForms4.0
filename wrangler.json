@@ -1,7 +1,5 @@
 {
   "name": "hackaccino",
   "compatibility_date": "2026-01-23",
-  "assets": {
-    "directory": "./build"
-  }
+  "pages_build_output_dir": "build"
 }
